@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventmesh-worker
+  labels:
+    app: eventmesh-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eventmesh-worker
+  template:
+    metadata:
+      labels:
+        app: eventmesh-worker
+    spec:
+      containers:
+        - name: worker
+          image: eventmesh-worker:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9091
+          envFrom:
+            - configMapRef:
+                name: eventmesh-config

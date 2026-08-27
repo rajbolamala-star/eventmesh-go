@@ -1,0 +1,19 @@
+ALTER TABLE events
+    ADD COLUMN IF NOT EXISTS first_failed_at TIMESTAMPTZ NULL,
+    ADD COLUMN IF NOT EXISTS last_failed_at TIMESTAMPTZ NULL,
+    ADD COLUMN IF NOT EXISTS dlq_at TIMESTAMPTZ NULL,
+    ADD COLUMN IF NOT EXISTS replayed_at TIMESTAMPTZ NULL,
+    ADD COLUMN IF NOT EXISTS original_topic TEXT NULL,
+    ADD COLUMN IF NOT EXISTS original_partition INTEGER NULL,
+    ADD COLUMN IF NOT EXISTS original_offset BIGINT NULL;
+
+ALTER TABLE events
+    DROP CONSTRAINT IF EXISTS events_status_check;
+
+ALTER TABLE events
+    ADD CONSTRAINT events_status_check CHECK (
+        status IN ('RECEIVED', 'PROCESSING', 'PROCESSED', 'FAILED', 'RETRYING', 'DLQ', 'REPLAY_PENDING', 'REPLAYED')
+    );
+
+CREATE INDEX IF NOT EXISTS idx_events_dlq_at ON events (dlq_at) WHERE status = 'DLQ';
+
