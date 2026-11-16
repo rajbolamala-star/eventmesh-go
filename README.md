@@ -513,3 +513,16 @@ docker build --build-arg SERVICE=worker -t eventmesh-worker:local .
 ## Kubernetes
 
 Starter manifests live under `deploy/k8s`. They intentionally reference local images and a ConfigMap; production deployments should move secrets such as database passwords into Kubernetes Secrets.
+
+## API Development Notes
+
+The EventMesh project provides an API for working with events.
+
+### Developer Workflow
+
+1. Create a feature branch from main.
+2. Make and test code changes.
+3. Review changes using Git.
+4. Commit changes with a descriptive message.
+5. Push the branch to GitHub.
+6. Open a Pull Request for review.
